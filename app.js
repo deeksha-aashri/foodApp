@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose=require("mongoose")
 const {db_link}=require('./secrets');
+const emailValidator=require("email-validator")
 app.use(express.json());
 let user = [
   {

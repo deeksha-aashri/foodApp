@@ -18,17 +18,22 @@ userRouter
   .route("/signup")
   .post(signup);
 
+  userRouter.route("/forgetpassword").post(forgetpassword);
+  userRouter.route("/resetpassword/:token").post(resetpassword);
 
+  userRouter
+  .route("/logout")
+  .post(logout);
 //profile page
 userRouter.use(protectRoute)
 userRouter
-  .route('/userProfile')
+  .route('/userprofile')
   .get(getUser)
 
 //admin specific function
 userRouter.use(isAuthorised(['admin']));
 userRouter.route('')
-.get(getAllUser)
+.get(allUser)
 
 
 module.exports = userRouter;

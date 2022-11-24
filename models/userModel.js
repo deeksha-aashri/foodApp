@@ -2,10 +2,11 @@ const mongoose = require("mongoose");
 const { db_link } = require("../secrets");
 const emailValidator = require("email-validator");
 const bcrypt = require('bcrypt');
+
 mongoose
   .connect(db_link)
   .then(function (db) {
-    console.log("db connected");
+    console.log(" user db connected");
     // console.log(db);
   })
   .catch(function (err) {
@@ -66,6 +67,22 @@ userSchema.pre("save", function () {
 //     this.password = hashedString;
 //     // console.log(hashedString);
 // })
+
+
+//.methods is used in mongoose to set functions in schema
+userSchema.methods.createResetToken = function () {
+  const resetToken = uuidv4(); 
+  this.resetToken = resetToken;
+  return resetToken;
+}
+
+
+//.methods is used in mongoose to set functions in schema
+userSchema.methods.resetPasswordHandler=function (password, confirmPassword){
+this.password=password,
+this.confirmPassword=confirmPassword;
+this.resetToken=undefined;//since we do not need token anymore. setting it to undefined makes mongo remove the key from db because it is smart
+}
 //models
 const userModel = mongoose.model("userModel", userSchema);
 module.exports = userModel;

@@ -43,5 +43,5 @@ mongoose
   })
 
 
-  const planModel=monf=goose.model("planModel", planSchema);
+  const planModel=mongoose.model("planModel", planSchema);
   module.exports=planModel;

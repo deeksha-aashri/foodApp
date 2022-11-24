@@ -1,40 +1,34 @@
 const express = require("express");
 const userRouter = express.Router();
-const userModel = require("../models/userModel");
-var jwt = require("jsonwebtoken");
-const JWT_KEY = "zdsfxcg234w5e6cg";
+const { getUser, postUser, updateUser, deleteUser, getAllUser} = require("../controller/userController");
+const {isAuthorised,protectRoute} = require('../helper');
+const { signup, login } = require('../controller/authController');
+
+//user ke options
 userRouter
-  .route("/")
-  .get(protectRoute, getUsers)
-  .post(postUser)
+  .route('/:id')
   .patch(updateUser)
-  .delete(deleteUser);
+  .delete(deleteUser)
 
-userRouter.route("/setcookies").get(setCookies);
+userRouter
+  .route("/login")
+  .post(login);
 
-userRouter.route("/getcookies").get(getCookies);
+userRouter
+  .route("/signup")
+  .post(signup);
 
-userRouter.route("/:name").get(getUserById);
 
-// let isLoggedIn = false;
-//isadmin cookie can be used to identify b/w user and admin 
-function protectRoute(req, res, next) { 
-  if (req.cookies.login) {
-    let token = req.cookies.login;
-    let isVerified = jwt.verify(token, JWT_KEY);
-    if (isVerified) next();
-    else {
-      req.json({
-        msg:'user not verified'
-      })
-    }
-  } else {
-    return res.json({
-      msg: "opertion not allowed",
-    });
-  }
-}
+//profile page
+userRouter.use(protectRoute)
+userRouter
+  .route('/userProfile')
+  .get(getUser)
 
+//admin specific function
+userRouter.use(isAuthorised(['admin']));
+userRouter.route('')
+.get(getAllUser)
 
 
 module.exports = userRouter;

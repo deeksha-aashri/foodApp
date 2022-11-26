@@ -1,8 +1,9 @@
 const express=require('express');
 const planRouter=express.Router();
 
+//anyone can access this plan
 planRouter
-          .route('/all')//anyone can access this plan
+          .route('/all')
           .get(getAllPlans);
 
  planRouter
@@ -15,9 +16,9 @@ planRouter
          .route('/single/:id')
          .get(getPlan);
 
-         //only admin can do the following
-
+//only admin can do the following
 planRouter.use(isAuthorised(['admin', 'restaurantowner'])) // logged in , lekin role 
+
 planRouter
     .route("/crud")
     .post(createPlan);

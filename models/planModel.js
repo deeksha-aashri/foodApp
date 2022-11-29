@@ -14,7 +14,7 @@ mongoose
 
 
 
-  mongoose.Schema({
+ const planSchema= mongoose.Schema({
     name:{
         type:String,
         required:true,
@@ -38,7 +38,12 @@ mongoose
         },'Discount should be less than 100%']//custom error
     },
     ratingsAverage:{
-    type:Number
+    type:Number,
+    default:0
+    },
+    nor:{
+      type:Number,
+      default:0,
     }
   })
 

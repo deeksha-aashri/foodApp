@@ -1,5 +1,7 @@
-const express=require('express');
-const planRouter=express.Router();
+const express = require('express');
+const { protectRoute, isAuthorised } = require('../helper');
+const planRouter = express.Router();
+const { getAllPlans, getPlan, createPlan, updatePlan, deletePlan, top3Plans } = require('../controller/planController');
 
 //anyone can access this plan
 planRouter

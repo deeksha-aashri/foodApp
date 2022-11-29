@@ -11,7 +11,7 @@ mongoose
     console.log(err);
   });
 
- const reviewSchema=new  mongoose.Schema({
+ const reviewSchema= new  mongoose.Schema({
     review:{
    type:"String",
    required:[true, "Review is required"],
@@ -36,7 +36,7 @@ mongoose
     plan:{
         type:mongoose.Schema.ObjectId,
      ref:"planModel",
-     required:[true, "Plan must belong to a user"],
+    //  required:[true, "Plan must belong to a user"],
     }
 
   })
@@ -44,8 +44,8 @@ mongoose
 //  /^find / is a regular exp(regex) so any input which contains find (findbyid, findone , findoneandupdate )  will work as follows
 reviewSchema.pre(/^find/, function (next) {
     this.populate({
-        path: 'user',
-        select: "name profileImage"
+        path: 'user',  //fills the user field in reviewschema
+        select: "name profileImage" //with these two fields from refernced model 
     }).populate("plan");
     next();
 })

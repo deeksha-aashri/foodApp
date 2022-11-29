@@ -13,15 +13,15 @@ module.exports.getUser = async function (req, res) {
   }
 };
 
-// module.exports.postUser=function (req, res) {
-//   console.log(req.body.Name);
-//   //then i can put this in db
-//   user.push(req.body);
-//   res.json({
-//     message: "Data received successfully",
-//     user: req.body,
-//   });
-// }
+module.exports.postUser=function (req, res) {
+  console.log(req.body.Name);
+  //then i can put this in db
+  user.push(req.body);
+  res.json({
+    message: "Data received successfully",
+    user: req.body,
+  });
+}
 
 module.exports.updateUser = async function (req, res) {
   console.log(req.body);

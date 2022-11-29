@@ -1,4 +1,5 @@
 
+const planModel = require('../models/planModel');
 const reviewModel=require('../models/reviewModel')
 
 module.exports.getAllReviews=async function(req,res){
@@ -39,12 +40,13 @@ catch(err){
 
 module.exports.getPlanReview=async function(req,res){
     try{
-     let id=req.params.id;//from frontend
-     let review=await reviewModel.findById(id);
-     if(review){
+     let planId=req.params.id;//from frontend
+     let reviews = await reviewModel.find();
+      reviews = reviews.filter(review => review.plan["_id"] == planId);
+     if(reviews){
         res.json({
             msg:"Review retrieved",
-            review
+            reviews
         })
      }
      else{
@@ -63,14 +65,22 @@ module.exports.getPlanReview=async function(req,res){
 
 module.exports.createReview=async function (req,res){
 try{
-    let data= req.body;
+  //we should know the plan to whih this review belongs
+  const planId=req.params.plan;//params since when we click on the plan we land on a page to create review
+  const plan =await planModel.findById(planId);
+  const data=req.body;//data=review lies in req's body
     let review= await reviewModel.create(data);
+    //updating the average rating of the plan
+    plan.ratingsAverage=(plan.ratingsAverage*plan.nor+req.body.rating)/(nor+1);
+    plan.nor+=1;
+    await plan.save();
+    await review.save();
     res.json({
         msg:"Review added", review
     })
 }
 catch(err){
-  res.json({
+  res.status(500).json({
     msg:err.message,
   })
 }
@@ -108,8 +118,15 @@ catch(err){
 
 module.exports.deleteReview=async function (req,res){
     try{
-        let id=req.params.id;//from frontend
-        let deletedReview = await reviewModel.findByIdAndDelete(id);
+        let planId=req.params.id;//from frontend
+        let reviewId=req.body.id;
+        //change average rating of plan
+        let plan=await planModel.findById(planId);
+    
+        plan.ratingsAverage=(plan.ratingsAverage*plan.nor - req.body.rating)/ (plan.nor -1);
+        plan.nor-=1;
+        await plan.save();
+        let deletedReview = await reviewModel.findByIdAndDelete(reviewId);
         return res.json({
          msg: "review deleted succesfully",
          deletedReview,

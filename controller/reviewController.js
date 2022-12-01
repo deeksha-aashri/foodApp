@@ -42,11 +42,17 @@ module.exports.getPlanReview=async function(req,res){
     try{
      let planId=req.params.id;//from frontend
      let reviews = await reviewModel.find();
-      reviews = reviews.filter(review => review.plan["_id"] == planId);
-     if(reviews){
+     console.log("Reviews "+reviews)
+     filteredreviews = reviews.filter(review => {
+       
+      //  console.log("Reviews "+review.plan)
+      review.plan["_id"] == planId});
+     
+     
+     if( filteredreviews){
         res.json({
             msg:"Review retrieved",
-            reviews
+            filteredreviews
         })
      }
      else{
@@ -66,16 +72,24 @@ module.exports.getPlanReview=async function(req,res){
 module.exports.createReview=async function (req,res){
 try{
   //we should know the plan to whih this review belongs
-  const planId=req.params.plan;//params since when we click on the plan we land on a page to create review
+  const planId=req.params.id;//params since when we click on the plan we land on a page to create review
   const plan =await planModel.findById(planId);
-  const data=req.body;//data=review lies in req's body
+  let user=req.id
+  console.log("type is ",typeof user)
+  console.log(req.body)
+  
+  console.log("The user id is",user)
+  console.log("The plan id is",planId)
+  const data=await req.body;//data=review lies in req's body
     let review= await reviewModel.create(data);
     //updating the average rating of the plan
-    plan.ratingsAverage=(plan.ratingsAverage*plan.nor+req.body.rating)/(nor+1);
+    console.log(data)
+    plan.ratingsAverage=(plan.ratingsAverage*plan.nor+req.body.rating)/(plan.nor+1);
     plan.nor+=1;
+    console.log("review ready")
     await plan.save();
     await review.save();
-    res.json({
+    return res.json({
         msg:"Review added", review
     })
 }
@@ -120,6 +134,8 @@ module.exports.deleteReview=async function (req,res){
     try{
         let planId=req.params.id;//from frontend
         let reviewId=req.body.id;
+        console.log("The review to be deleted is", reviewId)
+        console.log("The req obj is", req.body);
         //change average rating of plan
         let plan=await planModel.findById(planId);
     

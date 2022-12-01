@@ -6,36 +6,45 @@ const { JWT_KEY } = require("./secrets");
 module.exports.protectRoute = async function (req, res, next) {
     let token;
     if (req.cookies.login) {
-      let token = req.cookies.login;
-      let isVerified = jwt.verify(token, JWT_KEY);
-      token = req.cookies.login;
+       token = req.cookies.login;
+     
+     
       let payloadObj = jwt.verify(token, JWT_KEY);
       const user = await userModel.findById(payloadObj.payload);
       req.id = user.id;
       req.role = user.role;
-      if (isVerified) next();
+      console.log(payloadObj)
+      if (payloadObj) {
+        next();
+        return;
+      }
       else {
-        req.json({
+         req.json({
             msg: "user not verified",
       });
     }
   } else {
     return res.json({
-      msg: "opertion not allowed",
+      msg: "operation not allowed",
     });
   }
 };
 
-//isAutorised-? check the user's role
+//isAutorised will check the user's role
 // client will send role key in req obj
 module.exports.isAuthorised = function (roles) {
+  console.log("The roles are", roles)
   return function (req, res, next) {
     let role = req.role;
     if (roles.includes(role)) {
       next();
+      // return;
     }
-    res.status(401).json({
-      msg: "operation not allowed",
-    });
+    else{
+      res.status(401).json({
+        msg: "User not authorized to perform this operation",
+      });
+    }
+   
   };
 };

@@ -69,11 +69,19 @@ module.exports.createPlan= async function(req,res){
    try{
     let data= req.body;
     let newPlan=await planModel.create(data);
+    if(newPlan){
+      return   res.json({
+        msg:"New plan has been created",
+        newPlan
+    })
+
     
-        res.json({
-            msg:"New plan has been created",
-            newPlan
-        })
+  }
+  else{
+    res.json({
+      msg:"Plan could not be created"
+    })
+  }   
    }
    catch(err){
    res.json({
@@ -113,7 +121,9 @@ module.exports.updatePlan=async function(req,res){
 module.exports.deletePlan=async function(req,res){
   try{
    let id=req.params.id;//from frontend
+   console.log(id)
    let deletedPlan = await planModel.findByIdAndDelete(id);
+   console.log(deletedPlan)
    return res.json({
     msg: "plan deleted succesfully",
     deletedPlan,

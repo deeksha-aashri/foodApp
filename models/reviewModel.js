@@ -11,7 +11,7 @@ mongoose
     console.log(err);
   });
 
- const reviewSchema= new  mongoose.Schema({
+ const reviewSchema=   mongoose.Schema({
     review:{
    type:"String",
    required:[true, "Review is required"],
@@ -31,12 +31,12 @@ mongoose
     user:{
      type:mongoose.Schema.ObjectId,
      ref:"userModel",
-     required:[true, "User needed to write a review"]
+     required:[true, "User should be logged in"]
     },
     plan:{
         type:mongoose.Schema.ObjectId,
      ref:"planModel",
-    //  required:[true, "Plan must belong to a user"],
+     required:[true, "Plan must belong to a user"],
     }
 
   })

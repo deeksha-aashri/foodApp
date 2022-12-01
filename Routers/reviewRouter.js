@@ -1,8 +1,8 @@
 const express=require("express");
 const reviewRouter=express.Router();
-
+// console.log(reviewRouter)
 const {isAuthorised, protectRoute}=require('../helper');
-const userRouter = require("./userRouter");
+// const userRouter = require("./userRouter");
 const { getAllReviews, top3reviews, getPlanReview, createReview, updateReview, deleteReview } = require("../controller/reviewController");
 reviewRouter
            .route('/top3') 
@@ -14,8 +14,7 @@ reviewRouter
            .get(getAllReviews);
 
 
-
- userRouter.use(protectRoute)
+ reviewRouter.use(protectRoute)
 reviewRouter
            .route('/create/:id')
            .post(createReview);

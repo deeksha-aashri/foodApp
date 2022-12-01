@@ -96,7 +96,7 @@ try{
     user.resetPasswordHandler(password, confirmPassword);
     await user.save();
     res.json({
-      msg: "password chnaged succesfully",
+      msg: "password changed succesfully",
     });
   }
   else{

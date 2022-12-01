@@ -22,10 +22,10 @@ planRouter
 planRouter.use(isAuthorised(['admin', 'restaurantowner'])) // logged in , lekin role 
 
 planRouter
-    .route("/crud")
+    .route("/create")
     .post(createPlan);
 planRouter
-         .route('/crud/:id')//will the the id from frontend using req.params
+         .route('/crud/:id')//will get the id from frontend using req.params
          .patch(updatePlan)
          .delete(deletePlan)
 

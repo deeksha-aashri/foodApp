@@ -1,13 +1,14 @@
 const userModel = require("../models/userModel");
 var jwt = require("jsonwebtoken");
 const { JWT_KEY } = require("../secrets");
-
+const { sendMail } = require('../utility/nodemailer')
 
 module.exports.signup=async function (req, res) {
   try {
     let data = req.body; //name, email, password
       let user = await userModel.create(data);
       if (user) {
+        await sendMail("signup",user)
           res.json({
             msg: "user signed up",
             user,
@@ -56,19 +57,19 @@ module.exports.login=async function (req, res) {
   }
 }
 
-module.exports.forgotpassword=function (req,res){
+module.exports.forgotpassword=async function (req,res){
     try{
     let {email}=req.body;//aaega frontends se
     const user=userModel.findOne({email:email});//us email ka user
     if(user){//if such a user exists
         //resetToken generation
-        const resetToken=user.createResetToken();//this method will be assigned to the user doc using mongoose methods right now assume we have sucha function already so using it
+        const resetToken=user.createResetToken();//this method will be assigned to the user doc using mongoose methods right now assume we have such a function already so using it
 
         //create reset link which will be sent to the eamil id
         let resetPasswordLink=`${req.protocol}://${req.get('host')}/resetpaswword/${resetToken}`;
 
         //send the email with this link using nodemailer
-
+        await sendMail("forgetpassword",{email,resetPasswordLink});
 
 
     }

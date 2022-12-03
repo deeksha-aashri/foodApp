@@ -42,17 +42,21 @@ module.exports.getPlanReview=async function(req,res){
     try{
      let planId=req.params.id;//from frontend
      let reviews = await reviewModel.find();
-     console.log("Reviews "+reviews)
-     filteredreviews = reviews.filter(review => {
-       
-      //  console.log("Reviews "+review.plan)
+    //  console.log("Reviews "+reviews)
+     console.log(Array.isArray (reviews))
+    reviews = reviews.filter(review => {
+
+      // --------------------->DOUBT
+      
+       console.log(review.plan["_id"])
+      
       review.plan["_id"] == planId});
      
-     
-     if( filteredreviews){
+      console.log("Filtered Reviews "+reviews)
+     if( reviews){
         res.json({
             msg:"Review retrieved",
-            filteredreviews
+            reviews
         })
      }
      else{

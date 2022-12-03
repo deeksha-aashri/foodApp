@@ -4,6 +4,7 @@ const userModel = require('../models/userModel');
 let SK="sk_test_51M8f0QSIyZmUPyzEQd1wiOSZqxrEKiO1LFEd2qGyDLWCCEzsr7qGNa4K1WEZsDdFg1hKW6g0QMpKr6vtxrllWcvB00Q2UFZAsj";
 const stripe =require('stripe')(SK);
 
+
 module.exports.createSession=async function(req,res){
 try{
   let userId=req.id;
@@ -26,7 +27,7 @@ try{
         quantity:1,
         },
     ],
-    success_url:`${req.protocol}://{req.get('host')}/profile`,
+    success_url:`${req.protocol}://${req.get('host')}/profile`,
     cancel_url: `${req.protocol}://${req.get("host")}/profile`,
 
   })

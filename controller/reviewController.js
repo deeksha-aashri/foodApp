@@ -47,10 +47,10 @@ module.exports.getPlanReview=async function(req,res){
     reviews = reviews.filter(review => {
 
       // --------------------->DOUBT
+
+      //  let Idfromarr=review.plan["_id"].toString()
       
-       console.log(review.plan["_id"])
-      
-      review.plan["_id"] == planId});
+      return  review.plan["_id"]== planId});
      
       console.log("Filtered Reviews "+reviews)
      if( reviews){

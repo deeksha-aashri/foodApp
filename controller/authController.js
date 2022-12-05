@@ -59,18 +59,20 @@ module.exports.login=async function (req, res) {
 
 module.exports.forgotpassword=async function (req,res){
     try{
-    let {email}=req.body;//aaega frontends se
-    const user=userModel.findOne({email:email});//us email ka user
+    let {email}=req.body;//We get it from the frontend
+    const user= await userModel.findOne({email:email});//The user against this email
     if(user){//if such a user exists
         //resetToken generation
-        const resetToken=user.createResetToken();//this method will be assigned to the user doc using mongoose methods right now assume we have such a function already so using it
+        const resetToken=await user.createResetToken();//this method will be assigned to the user doc using mongoose methods right now assume we have such a function already so using it
 
         //create reset link which will be sent to the eamil id
-        let resetPasswordLink=`${req.protocol}://${req.get('host')}/resetpaswword/${resetToken}`;
-
+        let resetPasswordLink = `${req.protocol}://${req.get('host')}/user/resetpassword/${resetToken}`;
+    console.log(resetPasswordLink)
         //send the email with this link using nodemailer
-        await sendMail("forgetpassword",{email,resetPasswordLink});
-
+        await sendMail("forgotpassword",{email,resetPasswordLink});
+     res.json({
+      msg:"A link to reset your password has been emailed"
+     })
 
     }
     else{
@@ -106,7 +108,7 @@ try{
     });
   }
 }
-catch{
+catch(err){
     res.json({
         msg:err.message
       })
@@ -115,9 +117,9 @@ catch{
 
 
 module.exports.logout=function(req,res){
-    res.cookies('login',' ', {maxAge:1})//setting login cookie as blank for one milisecond so it expires then
+    res.cookie('login',' ', {maxAge:1})//setting login cookie as blank for one milisecond so it expires then
     res.json({
-        
+        msg:"User has logged out successfully"
     })
 }
 

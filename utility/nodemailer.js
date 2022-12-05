@@ -30,7 +30,7 @@ module.exports.sendMail = async function sendMail(str, data) {
  } else if (str == "forgotpassword") {
    eSubj = `Reset Password`;
    eHtml = `
-       <h1>foodApp.com</h1>
+       <h1>foodApp</h1>
        Here is your link to reset password : ${data.resetPasswordLink}
        `;
  }
@@ -38,8 +38,8 @@ module.exports.sendMail = async function sendMail(str, data) {
  let info = await transporter.sendMail({
    from: '"FoodApp 🥗" <deekshaaashri1@gmail.com>', // sender address
    to: data.email, // list of receivers
-   subject: eSubj, // Subject line
-   // text: "Hello world?", // plain text body
+   subject: eSubj, // Subject 
+   // text: "Hello world?", // in case of plain text body
    html: eHtml, // html body
  });
 

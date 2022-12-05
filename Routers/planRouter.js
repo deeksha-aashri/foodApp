@@ -5,7 +5,7 @@ const { getAllPlans, getPlan, createPlan, updatePlan, deletePlan, top3Plans } = 
 
 //anyone can access this plan
 planRouter
-          .route('/all')
+          .route('/allPlans')
           .get(getAllPlans);
 
  planRouter
@@ -15,7 +15,7 @@ planRouter
 //only logged in people can access
 planRouter.use(protectRoute)         
 planRouter
-         .route('/single/:id')
+         .route('/plan/:id')
          .get(getPlan);
 
 //only admin can do the following

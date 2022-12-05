@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { db_link } = require("../secrets");
 const emailValidator = require("email-validator");
 const bcrypt = require('bcrypt');
-const uuidv4 = require("uuid");
+const { v4: uuidv4 } = require('uuid');
 mongoose
   .connect(db_link)
   .then(function (db) {
@@ -32,7 +32,7 @@ const userSchema = mongoose.Schema({
   },
   confirmPassword: {
     type: String,
-    required: true,
+    // required: true,
     minLength: 7,
     validate: function () {
       return this.confirmPassword == this.password;
@@ -46,7 +46,8 @@ const userSchema = mongoose.Schema({
   profileImage: {
     type: String,
     default:'img/users/default.jpg'
-  }
+  },
+  resetToken: { type: String }
 });
 
 //-------------->learning hooks<-----------------
@@ -70,9 +71,10 @@ userSchema.pre("save", function () {
 
 
 //.methods is used in mongoose to set functions in schema
-userSchema.methods.createResetToken = function () {
+userSchema.methods.createResetToken = async function () {
   const resetToken = uuidv4(); 
   this.resetToken = resetToken;
+  await this.save();
   return resetToken;
 }
 

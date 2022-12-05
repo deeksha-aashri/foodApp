@@ -10,7 +10,7 @@ const {
 const {isAuthorised,protectRoute} = require('../helper');
 const { signup, login, forgotpassword, resetpassword, logout } = require('../controller/authController');
 
-//user ke options
+//options available to a user
 userRouter
   .route('/:id')
   .patch(updateUser)

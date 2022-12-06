@@ -8,9 +8,9 @@ const cookieParser = require("cookie-parser");
 app.use(express.json());
 app.use(cookieParser());
 
-// var whitelist='http://localhost:3000/'
+// // var whitelist='http://localhost:3000/'
 
-app.options('*', cors())//to allow preflight
+// app.options('*', cors())//to allow preflight
 
 const userRouter = require('./Routers/userRouter');
 const planRouter = require('./Routers/planRouter');

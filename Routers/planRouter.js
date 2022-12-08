@@ -13,7 +13,7 @@ planRouter
          .get(top3Plans);
 
 //only logged in people can access
-planRouter.use(protectRoute)         
+// planRouter.use(protectRoute)         
 planRouter
          .route('/plan/:id')
          .get(getPlan);

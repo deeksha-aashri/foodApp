@@ -26,8 +26,11 @@ catch(err){
 module.exports.top3reviews=async function(req,res){
 try{
 const reviews=await reviewModel.find().sort({rating:-1}).limit(3);
+console.log("The top 3 reviews are ",reviews)
 res.json({
-    msg:"Top 3 reviews found", reviews
+    msg:"Top 3 reviews found", 
+    reviews
+
 })
 }
 catch(err){
